@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <!-- 适配移动端，禁止缩放，宽度等于设备宽度 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>400电话销售 - 专业企业通信解决方案</title>
+    <!-- 内嵌CSS样式 -->
+    <style>
+        /* 基础样式重置：清除默认内外边距，设置盒模型 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 页面整体设置：字体、背景色、最小高度 */
+        body {
+            font-family: "Microsoft YaHei", "微软雅黑", sans-serif; /* 常用中文字体，兼容多系统 */
+            background-color: #f5f7fa; /* 浅灰色背景，柔和不刺眼 */
+            min-height: 100vh; /* 最小高度占满视口，避免内容区过短 */
+            color: #333; /* 默认文字颜色，清晰易读 */
+        }
+
+        /* 头部导航区域样式 */
+        .header {
+            background: linear-gradient(135deg, #1e6091, #2b8be6); /* 蓝色渐变背景，体现商务专业感 */
+            color: white;
+            padding: 15px 5%; /* 上下15px，左右5%适配不同屏幕 */
+            display: flex; /* 弹性布局，让元素横向排列 */
+            justify-content: space-between; /* 左右元素两端对齐 */
+            align-items: center; /* 垂直居中对齐 */
+            position: sticky; /* 顶部固定，滚动时保持可见 */
+            top: 0;
+            z-index: 100; /* 层级最高，避免被其他元素遮挡 */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* 轻微阴影，增加层次感 */
+        }
+
+        /* 头部品牌标识样式 */
+        .logo {
+            font-size: 24px; /* 合适的文字大小，突出品牌 */
+            font-weight: bold; /* 加粗字体，更醒目 */
+            letter-spacing: 2px; /* 字符间距，提升美观度 */
+        }
+
+        /* 头部咨询热线样式 */
+        .hotline {
+            display: flex;
+            align-items: center; /* 图标与文字垂直居中 */
+            gap: 8px; /* 图标和文字间距 */
+        }
+
+        .hotline i {
+            font-size: 20px; /* 图标大小 */
+        }
+
+        .hotline span {
+            font-size: 18px; /* 热线文字大小 */
+            font-weight: bold; /* 加粗突出号码 */
+        }
+
+        /* 轮播图容器样式 */
+        .banner {
+            position: relative; /* 相对定位，作为子元素绝对定位的参考 */
+            height: 500px; /* 固定高度，适配电脑端 */
+            overflow: hidden; /* 隐藏超出容器的内容，实现轮播切换效果 */
+        }
+
+        /* 轮播项目通用样式 */
+        .banner-item {
+            position: absolute; /* 绝对定位，让所有轮播项重叠 */
+            top: 0;
+            left: 0;
+            width: 100%; /* 宽度占满容器 */
+            height: 100%; /* 高度占满容器 */
+            display: flex; /* 内部用弹性布局排列 */
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            opacity: 0; /* 初始透明，不显示 */
+            transition: opacity 0.8s ease; /* 淡入淡出动画，提升流畅度 */
+        }
+
+        /* 轮播项激活时的样式（当前显示项） */
+        .banner-item.active {
+            opacity: 1; /* 不透明，显示内容 */
+        }
+
+        /* 轮播内容区域样式 */
+        .banner-content {
+            text-align: center; /* 内容居中 */
+            color: white;
+            padding: 0 20px; /* 左右留白，避免内容贴边 */
+        }
+
+        .banner-content h1 {
+            font-size: 42px; /* 主标题大字体，突出核心卖点 */
+            margin-bottom: 20px; /* 标题与副标题间距 */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* 文字阴影，增加立体感 */
+        }
+
+        .banner-content p {
+            font-size: 18px; /* 副标题适中字体，清晰易读 */
+            margin-bottom: 30px; /* 副标题与按钮间距 */
+            max-width: 600px; /* 限制最大宽度，避免文字过长换行 */
+            margin-left: auto; /* 配合最大宽度，实现水平居中 */
+            margin-right: auto;
+        }
+
+        /* 轮播按钮样式 */
+        .btn {
+            display: inline-block; /* 转为行内块，可设置宽高与内边距 */
+            padding: 15px 40px; /* 按钮内边距，控制大小 */
+            background: linear-gradient(135deg, #f39c12, #e67e22); /* 橙色渐变，醒目且具引导性 */
+            color: white;
+            text-decoration: none; /* 去掉链接下划线 */
+            border-radius: 30px; /* 圆角，提升美观度 */
+            font-size: 18px; /* 按钮文字大小 */
+            font-weight: bold; /* 加粗文字 */
+            transition: all 0.3s ease; /* 悬停过渡动画，提升交互感 */
+            box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3); /* 按钮阴影，增加层次 */
+        }
+
+        .btn:hover {
+            transform: translateY(-3px); /* 悬停上移，体现可点击感 */
+            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4); /* 阴影加深，更突出 */
+        }
+
+        /* 轮播指示器样式 */
+        .indicators {
+            position: absolute; /* 绝对定位，放置在轮播图内 */
+            bottom: 20px; /* 距离底部20px */
+            left: 50%; /* 水平居中 */
+            transform: translateX(-50%); /* 修正居中偏移，精准居中 */
+            display: flex; /* 指示器横向排列 */
+            gap: 10px; /* 指示器间距 */
+        }
+
+        .indicator {
+            width: 12px; /* 指示器宽度 */
+            height: 12px; /* 指示器高度 */
+            border-radius: 50%; /* 圆形指示器 */
+            background-color: rgba(255,255,255,0.5); /* 半透明白色，未激活状态 */
+            cursor: pointer; /* 鼠标悬停显示手型，提示可点击 */
+            transition: background-color 0.3s ease; /* 颜色过渡动画 */
+        }
+
+        .indicator.active {
+            background-color: white; /* 激活状态为白色，区分当前轮播项 */
+        }
+
+        /* 套餐展示区域样式 */
+        .packages {
+            padding: 60px 5%; /* 上下60px，左右5%的内边距，让内容不贴边 */
+            max-width: 1400px; /* 最大宽度限制，避免大屏幕内容过宽 */
+            margin: 0 auto; /* 水平居中，提升页面整体协调性 */
+        }
+
+        /* 区域标题通用样式 */
+        .section-title {
+            text-align: center; /* 标题居中 */
+            font-size: 32px; /* 标题字体大小，醒目突出 */
+            color: #1e6091; /* 标题蓝色，契合品牌色调 */
+            margin-bottom: 50px; /* 标题与下方内容的间距，保证呼吸感 */
+            position: relative; /* 相对定位，为伪元素做准备 */
+        }
+
+        .section-title::after {
+            content: ''; /* 伪元素内容为空，用于绘制下划线 */
+            position: absolute; /* 绝对定位，相对于标题位置 */
+            bottom: -15px; /* 下划线在标题下方15px处 */
+            left: 50%; /* 水平居中 */
+            transform: translateX(-50%); /* 修正居中偏移，精准对齐标题 */
+            width: 80px; /* 下划线宽度 */
+            height: 4px; /* 下划线高度 */
+            background: linear-gradient(135deg, #1e6091, #2b8be6); /* 蓝色渐变下划线，与品牌呼应 */
+            border-radius: 2px; /* 下划线圆角，柔和边缘 */
+        }
+
+        /* 套餐卡片容器：用弹性布局让卡片自动排列 */
+        .packages-grid {
+            display: grid; /* 使用网格布局，精准排列卡片 */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* 响应式网格：最小300px，自动填充剩余空间 */
+            gap: 30px; /* 卡片之间的间距，避免拥挤 */
+        }
+
+        /* 套餐卡片样式 */
+        .package-card {
+            background: white; /* 白色卡片，干净整洁 */
+            border-radius: 15px; /* 圆角卡片，提升现代感 */
+            overflow: hidden; /* 隐藏超出卡片的内容，配合悬停效果 */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1); /* 轻微阴影，增加层次 */
+            transition: all 0.3s ease; /* 悬停过渡动画，提升交互感 */
+        }
+
+        /* 卡片悬停效果：放大并加深阴影，引导用户点击 */
+        .package-card:hover {
+            transform: translateY(-10px); /* 上移卡片，体现悬停响应 */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); /* 阴影加深，突出悬停状态 */
+        }
+
+        /* 套餐卡片头部样式 */
+        .package-header {
+            background: linear-gradient(135deg, #1e6091, #2b8be6); /* 蓝色渐变头部，契合品牌 */
+            color: white;
+            padding: 25px; /* 头部内边距，控制内容布局 */
+            text-align: center; /* 头部内容居中 */
+        }
+
+        .package-header h3 {
+            font-size: 22px; /* 套餐名称字体大小 */
+            margin-bottom: 10px; /* 套餐名与价格的间距 */
+        }
+
+        .package-price {
+            font-size: 36px; /* 价格大字体，突出核心信息 */
+            font-weight: bold; /* 价格加粗，更醒目 */
+        }
+
+        .package-price span {
+            font-size: 16px; /* 单位字体较小，避免喧宾夺主 */
+        }
+
+        /* 套餐详情区域样式 */
+        .package-body {
+            padding: 25px; /* 详情区内边距，控制内容布局 */
+        }
+
+        .package-body ul {
+            list-style: none; /* 去掉列表默认的项目符号 */
+        }
+
+        .package-body li {
+            padding: 10px 0; /* 列表项上下内边距，增加行间距 */
+            border-bottom: 1px solid #eee; /* 列表项分隔线，提升可读性 */
+            display: flex; /* 用弹性布局让图标与文字对齐 */
+            align-items: center; /* 图标与文字垂直居中 */
+            gap: 10px; /* 图标与文字的间距 */
+        }
+
+        .package-body li:last-child {
+            border-bottom: none; /* 最后一项去掉分隔线，避免多余线条 */
+        }
+
+        .package-body li i {
+            color: #27ae60; /* 图标绿色，代表优势/包含项 */
+        }
+
+        /* 套餐办理按钮样式（适配卡片内） */
+        .package-btn {
+            display: block; /* 转为块元素，可独占一行 */
+            width: 100%; /* 宽度占满卡片，保证按钮醒目 */
+            padding: 15px; /* 按钮内边距，控制大小 */
+            background: linear-gradient(135deg, #1e6091, #2b8be6); /* 蓝色渐变，呼应品牌 */
+            color: white;
+            text-align: center; /* 文字居中 */
+            text-decoration: none; /* 去掉链接下划线 */
+            border-radius: 5px; /* 按钮圆角，提升美观度 */
+            font-size: 16px; /* 按钮文字大小 */
+            font-weight: bold; /* 文字加粗 */
+            margin-top: 20px; /* 按钮与详情的间距 */
+            transition: all 0.3s ease; /* 悬停过渡动画 */
+        }
+
+        .package-btn:hover {
+            background: linear-gradient(135deg, #155a7a, #1e7bb8); /* 悬停时深蓝色，反馈交互状态 */
+        }
+
+        /* 核心优势区域样式 */
+        .advantages {
+            padding: 60px 5%; /* 上下60px，左右5%的内边距 */
+            background: white; /* 白色背景，与套餐区区分 */
+        }
+
+        /* 优势项容器：网格布局排列 */
+        .advantages-grid {
+            display: grid; /* 网格布局排列优势项 */
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* 响应式网格：最小250px，自动填充 */
+            gap: 40px; /* 优势项间距，保证视觉呼吸感 */
+            max-width: 1400px; /* 最大宽度限制，避免大屏幕过宽 */
+            margin: 0 auto; /* 水平居中 */
+        }
+
+        /* 单个优势项样式 */
+        .advantage-item {
+            text-align: center; /* 内容居中 */
+            padding: 30px; /* 内边距控制内容布局 */
+            border-radius: 10px; /* 圆角卡片，柔和美观 */
+            background: #f8f9fa; /* 浅灰色背景，与白色区分又不突兀 */
+            transition: all 0.3s ease; /* 悬停过渡动画 */
+        }
+
+        /* 优势项悬停效果：放大并加深背景，提升交互感 */
+        .advantage-item:hover {
+            background: #e9ecef; /* 悬停时背景加深 */
+            transform: scale(1.05); /* 放大优势项，突出悬停状态 */
+        }
+
+        .advantage-icon {
+            font-size: 50px; /* 图标大尺寸，醒目突出 */
+            color: #1e6091; /* 图标蓝色，契合品牌 */
+            margin-bottom: 20px; /* 图标与文字的间距 */
+        }
+
+        .advantage-item h4 {
+            font-size: 20px; /* 标题字体大小，清晰易读 */
+            color: #333; /* 深色标题，保证辨识度 */
+            margin-bottom: 10px; /* 标题与描述的间距 */
+        }
+
+        .advantage-item p {
+            color: #666; /* 灰色描述文字，柔和不抢重点 */
+            line-height: 1.6; /* 行高优化，提升可读性 */
+        }
+
+        /* 底部联系区域样式 */
+        .contact {
+            background: linear-gradient(135deg, #1e6091, #2b8be6); /* 蓝色渐变背景，呼应头部 */
+            color: white;
+            padding: 60px 5%; /* 上下60px，左右5%的内边距 */
+            text-align: center; /* 内容居中 */
+        }
+
+        .contact h2 {
+            font-size: 32px; /* 标题大字体，突出联系引导 */
+            margin-bottom: 30px; /* 标题与下方信息的间距 */
+        }
+
+        .contact-info {
+            display: flex; /* 弹性布局排列联系信息 */
+            justify-content: center; /* 水平居中 */
+            flex-wrap: wrap; /* 允许换行，适配小屏幕 */
+            gap: 40px; /* 信息项间距 */
+            margin-bottom: 30px; /* 与表单的间距 */
+        }
+
+        .contact-item {
+            display: flex; /* 用弹性布局让图标与文字对齐 */
+            align-items: center; /* 垂直居中对齐 */
+            gap: 10px; /* 图标与文字间距 */
+            font-size: 18px; /* 联系信息字体大小 */
+        }
+
+        /* 联系表单样式 */
+        .contact-form {
+            max-width: 500px; /* 表单最大宽度，避免过宽 */
+            margin: 0 auto; /* 水平居中 */
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%; /* 输入框占满容器宽度 */
+            padding: 15px; /* 内边距，控制输入框大小 */
+            margin-bottom: 15px; /* 输入框间距 */
+            border: none; /* 去掉默认边框 */
+            border-radius: 5px; /* 圆角输入框，柔和美观 */
+            font-size: 16px; /* 输入框字体大小 */
+        }
+
+        .contact-form textarea {
+            height: 120px; /* 文本框固定高度，方便输入 */
+            resize: none; /* 禁止调整大小，避免破坏布局 */
+        }
+
+        .contact-form .btn {
+            width: 100%; /* 提交按钮占满宽度 */
+        }
+
+        /* 页脚版权区域样式 */
+        .footer {
+            background: #1a1a2e; /* 深色背景，沉稳专业 */
+            color: #999; /* 浅灰色文字，柔和不刺眼 */
+            text-align: center; /* 内容居中 */
+            padding: 20px 5%; /* 上下20px，左右5%的内边距 */
+        }
+
+        /* 移动端适配：屏幕宽度小于768px时的样式调整 */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column; /* 垂直排列头部元素，适配小屏幕 */
+                gap: 15px; /* 元素间距 */
+            }
+
+            .banner {
+                height: 400px; /* 降低轮播图高度，适配手机 */
+            }
+
+            .banner-content h1 {
+                font-size: 28px; /* 缩小主标题，避免小屏幕文字溢出 */
+            }
+
+            .banner-content p {
+                font-size: 16px; /* 缩小副标题，适配移动端 */
+            }
+
+            .section-title {
+                font-size: 24px; /* 缩小区域标题，适配小屏幕 */
+            }
+
+            .contact-info {
+                flex-direction: column; /* 联系信息垂直排列，避免重叠 */
+                gap: 20px; /* 缩小间距 */
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部区域：包含品牌标识和咨询热线 -->
+    <header class="header">
+        <div class="logo">讯通400电话</div>
+        <div class="hotline">
+            <i>&#128222;</i> <!-- 热线图标，直观传达功能 -->
+            <span>咨询热线：400-888-8888</span>
+        </div>
+    </header>
+
+    <!-- 轮播图区域：展示核心卖点，吸引用户关注 -->
+    <div class="banner">
+        <!-- 轮播项1：核心业务介绍 -->
+        <div class="banner-item active">
+            <div class="banner-content">
+                <h1>企业专属400电话办理</h1>
+                <p>提升企业形象，精准捕捉每一个客户来电，助力业务高效增长，让沟通更专业、更可靠</p>
+                <a href="#" class="btn" onclick="showContact()">立即咨询办理</a>
+            </div>
+        </div>
+        <!-- 轮播项2：核心优势介绍 -->
+        <div class="banner-item">
+            <div class="banner-content">
+                <h1>全国统一接入，通话稳定不掉线</h1>
+                <p>覆盖全国的通信网络，7×24小时技术支持，保障通话质量，为企业打造可靠的客户沟通桥梁</p>
+                <a href="#" class="btn" onclick="showContact()">免费获取方案</a>
+            </div>
+        </div>
+        <!-- 轮播项3：优惠活动介绍 -->
+        <div class="banner-item">
+            <div class="banner-content">
+                <h1>限时特惠，低至8折起</h1>
+                <p>本月办理400电话，享套餐8折优惠，更有精美礼品赠送，数量有限，先到先得</p>
+                <a href="#" class="btn" onclick="showContact()">抢占优惠名额</a>
+            </div>
+        </div>
+        <!-- 轮播指示器：用于手动切换轮播内容 -->
+        <div class="indicators">
+            <span class="indicator active" onclick="goToSlide(0)"></span>
+            <span class="indicator" onclick="goToSlide(1)"></span>
+            <span class="indicator" onclick="goToSlide(2)"></span>
+        </div>
+    </div>
+
+    <!-- 套餐展示区域：呈现不同套餐的价格、内容，引导用户选择 -->
+    <section class="packages">
+        <h2 class="section-title">热门套餐方案</h2>
+        <div class="packages-grid">
+            <!-- 基础版套餐卡片 -->
+            <div class="package-card">
+                <div class="package-header">
+                    <h3>基础版套餐</h3>
+                    <div class="package-price">699<span>元/年</span></div>
+                </div>
+                <div class="package-body">
+                    <ul>
+                        <li><i>✓</i> 400号码一个（随机分配）</li>
+                        <li><i>✓</i> 1000分钟通话时长</li>
+                        <li><i>✓</i> 基础通话录音功能</li>
+                        <li><i>✓</i> 多终端接听（手机/固话）</li>
+                        <li><i>✓</i> 7×8小时客服支持</li>
+                    </ul>
+                    <a href="#" class="package-btn" onclick="showContact()">立即办理</a>
+                </div>
+            </div>
+            <!-- 标准版套餐卡片 -->
+            <div class="package-card">
+                <div class="package-header">
+                    <h3>标准版套餐</h3>
+                    <div class="package-price">1999<span>元/年</span></div>
+                </div>
+                <div class="package-body">
+                    <ul>
+                        <li><i>✓</i> 400号码任选（部分可选）</li>
+                        <li><i>✓</i> 5000分钟通话时长</li>
+                        <li><i>✓</i> 高清通话录音+录音下载</li>
+                        <li><i>✓</i> 智能转接（按区域/时段）</li>
+                        <li><i>✓</i> 7×24小时客服支持</li>
+                        <li><i>✓</i> 客户来电分析报告</li>
+                    </ul>
+                    <a href="#" class="package-btn" onclick="showContact()">立即办理</a>
+                </div>
+            </div>
+            <!-- 旗舰版套餐卡片 -->
+            <div class="package-card">
+                <div class="package-header">
+                    <h3>旗舰版套餐</h3>
+                    <div class="package-price">3999<span>元/年</span></div>
+                </div>
+                <div class="package-body">
+                    <ul>
+                        <li><i>✓</i> 400精品号码任选（优质号段）</li>
+                        <li><i>✓</i> 15000分钟通话时长</li>
+                        <li><i>✓</i> 全功能通话管理系统</li>
+                        <li><i>✓</i> 定制化IVR语音导航</li>
+                        <li><i>✓</i> 专属客户经理一对一服务</li>
+                        <li><i>✓</i> 详细客户行为分析报表</li>
+                        <li><i>✓</i> 企业专属彩铃定制</li>
+                    </ul>
+                    <a href="#" class="package-btn" onclick="showContact()">立即办理</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 核心优势区域：展示企业服务优势，建立用户信任 -->
+    <section class="advantages">
+        <h2 class="section-title">我们的核心优势</h2>
+        <div class="advantages-grid">
+            <div class="advantage-item">
+                <div class="advantage-icon">&#128246;</div>
+                <h4>通话稳定</h4>
+                <p>采用三大运营商核心网络，保障通话稳定不卡顿，通话接通率达99.9%</p>
+            </div>
+            <div class="advantage-item">
+                <div class="advantage-icon">&#128274;</div>
+                <h4>数据安全</h4>
+                <p>通话数据全程加密存储，严格遵循数据安全规范，全方位保护企业与客户隐私</p>
+            </div>
+            <div class="advantage-item">
+                <div class="advantage-icon">&#9889;</div>
+                <h4>快速开通</h4>
+                <p>提交资料后3个工作日内完成审核开通，专业团队全程协助，高效省心</p>
+            </div>
+            <div class="advantage-item">
+                <div class="advantage-icon">&#128222;</div>
+                <h4>专属服务</h4>
+                <p>提供7×24小时技术支持，专属客服一对一对接，及时解决使用过程中的问题</p>
+            </div>
+            <div class="advantage-item">
+                <div class="advantage-icon">&#128176;</div>
+                <h4>成本可控</h4>
+                <p>套餐价格透明无隐形消费，按需选择适配方案，助力企业降低通信成本</p>
+            </div>
+            <div class="advantage-item">
+                <div class="advantage-icon">&#128202;</div>
+                <h4>智能管理</h4>
+                <p>配备智能通话管理系统，支持录音、转接、数据分析，让企业管理更高效</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系咨询区域：提供咨询入口和表单，收集用户线索 -->
+    <section class="contact">
+        <h2>立即咨询获取专属方案</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i>&#128222;</i>
+                <span>咨询热线：400-888-8888</span>
+            </div>
+            <div class="contact-item">
+                <i>&#128172;</i>
+                <span>在线客服：点击咨询</span>
+            </div>
+            <div class="contact-item">
+                <i>&#128205;</i>
+                <span>公司地址：XX市XX区XX大厦</span>
+            </div>
+        </div>
+        <form class="contact-form" onsubmit="submitForm(event)">
+            <input type="text" placeholder="请输入您的姓名" required>
+            <input type="tel" placeholder="请输入联系电话" required>
+            <textarea placeholder="请输入您的咨询需求"></textarea>
+            <button type="submit" class="btn">提交咨询</button>
+        </form>
+    </section>
+
+    <!-- 页脚版权区域：展示版权信息、备案号等 -->
+    <footer class="footer">
+        <p>&#169; 2025 讯通科技 版权所有 | 备案号：京ICP备XXXXXXXX号</p>
+    </footer>
+
+    <!-- 内嵌JavaScript代码，实现页面交互功能 -->
+    <script>
+        // 轮播图核心变量：控制轮播切换逻辑
+        let currentSlide = 0; // 记录当前显示的轮播项索引（从0开始）
+        const slides = document.querySelectorAll('.banner-item'); // 获取所有轮播项元素
+        const indicators = document.querySelectorAll('.indicator'); // 获取所有轮播指示器元素
+        const totalSlides = slides.length; // 轮播项总数，用于循环切换
+
+        // 自动轮播函数：定时切换轮播内容
+        function autoSlide() {
+            // 每隔3秒执行一次切换操作
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % totalSlides; // 索引+1后取余，实现循环切换
+                goToSlide(currentSlide); // 调用切换函数，更新轮播内容
+            }, 3000);
+        }
+
+        // 手动切换轮播图函数：根据索引切换到指定轮播项
+        function goToSlide(index) {
+            // 移除所有轮播项的激活状态，全部设为隐藏
+            slides.forEach(slide => slide.classList.remove('active'));
+            // 给目标索引的轮播项添加激活状态，设为显示
+            slides[index].classList.add('active');
+            // 同步更新指示器状态：非激活的设为半透明，激活的设为实色
+            indicators.forEach(ind => ind.classList.remove('active'));
+            indicators[index].classList.add('active');
+            currentSlide = index; // 更新当前轮播项索引，保证自动轮播与手动切换同步
+        }
+
+        // 显示联系方式弹窗函数：点击咨询按钮时触发
+        function showContact() {
+            alert('如有疑问，可拨打咨询热线：400-888-8888，或提交页面底部表单，我们将第一时间联系您！');
+        }
+
+        // 提交表单函数：处理用户提交的咨询信息
+        function submitForm(event) {
+            event.preventDefault(); // 阻止表单默认提交行为，避免页面刷新
+            alert('感谢您的咨询！我们的工作人员将在24小时内与您联系，请注意接听电话~');
+            // 实际开发中，这里需要对接后端接口，将表单数据发送到服务器
+            // 示例：fetch('/api/submit-contact', { method: 'POST', body: JSON.stringify(formData) });
+        }
+
+        // 页面加载完成后初始化轮播图
+        document.addEventListener('DOMContentLoaded', function() {
+            autoSlide(); // 启动自动轮播功能
+        });
+    </script>
+</body>
+</html>
